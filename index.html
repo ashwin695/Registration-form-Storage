@@ -21,15 +21,31 @@
             userTable.innerHTML = "<tr><th>Name</th><th>Email</th><th>Phone</th><th>Action</th></tr>";
             for (var i = 0; i < users.length; i++) {
                 var user = users[i];
-                var row = "<tr><td>" + user.name + "</td><td>" + user.email + "</td><td>" + user.phone + "</td><td><button onclick='deleteUser(" + i + ")'>Delete</button></td></tr>";
+                var row = "<tr><td>" + user.name + "</td><td>" + user.email + "</td><td>" + user.phone + "</td><td><button onclick='editUser(" + i + ")'>Edit</button>\n<button onclick='deleteUser(" + i + ")'>Delete</button></td></tr>";
                 userTable.innerHTML += row;
             }
         }
 
+        function editUser(index) {
+            var users = JSON.parse(localStorage.getItem("users")) || [];
+            var user = users[index];
+            var newName = prompt("Enter new name", user.name);
+            var newEmail = prompt("Enter new email", user.email);
+            var newPhone = prompt("Enter new phone", user.phone);
+            if (newName !== null && newEmail !== null && newPhone !== null) {
+                user.name = newName;
+                user.email = newEmail;
+                user.phone = newPhone;
+                localStorage.setItem("users", JSON.stringify(users));
+                showUsers();
+            }
+        }
+
+
         function deleteUser(index) {
             var users = JSON.parse(localStorage.getItem("users")) || [];
             users.splice(index, 1);
-            localStorage.setItem("users", JSON.stringify(users));
+            localStorage.removeItem("users", JSON.stringify(users));
             showUsers();
         }
     window.onload = function () {
